@@ -56,7 +56,10 @@ exports.post = ({ appSdk }, req, res) => {
       label: appData.label || 'Super expresso',
       carrier: 'Pluggo',
       shipping_line: {
-        from: appData.from,
+        from: {
+          zip: appData.zip,
+          ...params.from
+        },
         to: params.to,
         price,
         delivery_time: {
