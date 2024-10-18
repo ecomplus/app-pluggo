@@ -1,7 +1,7 @@
 {
   "app": {
-    "title": "",
-    "short_description": "",
-    "category": "tools"
+    "title": "Log Manager",
+    "short_description": "Frete com entrega no mesmo dia via Log Manager (Pluggo).",
+    "category": "shipping"
   }
 }
