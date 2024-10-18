@@ -157,6 +157,15 @@ const app = {
       },
       hide: true
     },
+    label: {
+      schema: {
+        type: 'string',
+        maxLength: 50,
+        title: 'Rótulo',
+        description: 'Nome da forma de envio exibido aos clientes'
+      },
+      hide: false
+    },
     quotes: {
       schema: {
         title: 'Cotações da Pluggo',

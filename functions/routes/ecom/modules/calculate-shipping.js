@@ -1,3 +1,5 @@
+const defaultQuotes = require('../../../lib/pluggo/default-quotes')
+
 exports.post = ({ appSdk }, req, res) => {
   /**
    * Treat `params` and (optionally) `application` from request body to properly mount the `response`.
@@ -12,7 +14,7 @@ exports.post = ({ appSdk }, req, res) => {
    */
 
   const { params, application } = req.body
-  const { storeId } = req
+  // const { storeId } = req
   // setup basic required response object
   const response = {
     shipping_services: []
@@ -29,41 +31,47 @@ exports.post = ({ appSdk }, req, res) => {
     res.send(response)
     return
   }
+  const destinationZip = params.to ? params.to.zip.replace(/\D/g, '') : ''
 
-  /* DO THE STUFF HERE TO FILL RESPONSE OBJECT WITH SHIPPING SERVICES */
-
-  /**
-   * Sample snippets:
-
-  if (params.items) {
-    let totalWeight = 0
-    params.items.forEach(item => {
-      // treat items to ship
-      totalWeight += item.quantity * item.weight.value
-    })
-  }
-
-  // add new shipping service option
-  response.shipping_services.push({
-    label: appData.label || 'My shipping method',
-    carrier: 'My carrier',
-    shipping_line: {
-      from: appData.from,
-      to: params.to,
-      package: {
-        weight: {
-          value: totalWeight
-        }
-      },
-      price: 10,
-      delivery_time: {
-        days: 3,
-        working_days: true
+  let price
+  if (appData.quotes) {
+    for (let i = 0; i < appData.quotes.length; i++) {
+      const row = appData.quotes[i]
+      const zip = row.zip || row.CEP || row[0]
+      if (!zip) continue
+      if (`${zip}`.replace(/\D/g, '').padStart(8, '0') === destinationZip) {
+        price = row.price || row.Valor || row[1]
+        if (price) break
       }
     }
-  })
-
-  */
+  }
+  if (!price) {
+    const quote = defaultQuotes.find(([zip]) => zip === destinationZip)
+    if (quote) {
+      price = quote[1]
+    }
+  }
+  if (price) {
+    response.shipping_services.push({
+      label: appData.label || 'Super expresso',
+      carrier: 'Pluggo',
+      shipping_line: {
+        from: appData.from,
+        to: params.to,
+        price,
+        delivery_time: {
+          days: 0,
+          working_days: true
+        },
+        posting_deadline: {
+          days: 1,
+          working_days: true,
+          after_approval: true,
+          ...appData.posting_deadline
+        }
+      }
+    })
+  }
 
   res.send(response)
 }
