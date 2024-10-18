@@ -1,3 +1,8 @@
-# My Awesome E-Com Plus App
+# Log Manager
 
-Somethings about my app and what it does...
+Frete com entrega no mesmo dia via Log Manager.
+
+- Cálculo de frete por tabela;
+- Configurações opcionais de desconto e prazo;
+- Geração automática de etiqueta (envio de pedido);
+- Atualização automática de status da entrega;

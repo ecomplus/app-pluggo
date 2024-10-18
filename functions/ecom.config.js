@@ -7,7 +7,7 @@
 
 const app = {
   app_id: 117273,
-  title: 'Pluggo',
+  title: 'Log Manager',
   slug: 'pluggo',
   type: 'external',
   state: 'active',
@@ -142,8 +142,8 @@ const app = {
       schema: {
         type: 'string',
         maxLength: 255,
-        title: 'LogManager token',
-        description: 'Solicite na Pluggo sua chave de API Vendedor da LogManager'
+        title: 'Log Manager token',
+        description: 'Solicite na Log Manager sua chave de API Vendedor'
       },
       hide: true
     },
@@ -168,8 +168,8 @@ const app = {
     },
     quotes: {
       schema: {
-        title: 'Cotações da Pluggo',
-        description: 'Solicite na Pluggo a tabela CEP/valor da sua conta',
+        title: 'Cotações da Log Manager',
+        description: 'Solicite na Log Manager a tabela CEP/valor da sua conta',
         type: 'array',
         maxItems: 5000,
         items: {
