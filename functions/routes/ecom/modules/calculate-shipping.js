@@ -51,6 +51,7 @@ exports.post = ({ appSdk }, req, res) => {
       price = quote[1]
     }
   }
+  const discount = appData.additional_price ? -appData.additional_price : 0
   if (price) {
     response.shipping_services.push({
       label: appData.label || 'Super expresso',
@@ -62,6 +63,8 @@ exports.post = ({ appSdk }, req, res) => {
         },
         to: params.to,
         price,
+        total_price: price - discount,
+        discount,
         delivery_time: {
           days: 0,
           working_days: true
