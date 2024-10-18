@@ -1,11 +1,16 @@
 {
-  "app_id": 9000,
-  "title": "My Awesome E-Com Plus App",
-  "slug": "my-awesome-ecom-plus-app",
+  "app_id": 117273,
+  "title": "Pluggo",
+  "slug": "pluggo",
   "type": "external",
   "state": "active",
   "authentication": true,
-  "modules": {},
+  "modules": {
+    "calculate_shipping": {
+      "enabled": true,
+      "endpoint": "https://us-central1-ecom-pluggo.cloudfunctions.net/app/ecom/modules/calculate-shipping"
+    }
+  },
   "auth_scope": {
     "stores/me": [
       "GET"
@@ -17,15 +22,125 @@
     "brands": [],
     "categories": [],
     "customers": [],
-    "orders": [],
+    "orders": [
+      "GET",
+      "PATCH"
+    ],
     "carts": [],
-    "orders/fulfillments": [],
+    "orders/fulfillments": [
+      "POST"
+    ],
     "orders/payments_history": [],
     "products/quantity": [],
     "products/variations/quantity": [],
     "products/price": [],
     "products/variations/price": []
   },
-  "auth_callback_uri": "https://us-central1-ecom-app-boilerplate.cloudfunctions.net/app/ecom/auth-callback",
+  "admin_settings": {
+    "logmanager_token": {
+      "schema": {
+        "type": "string",
+        "maxLength": 255,
+        "title": "LogManager token",
+        "description": "Solicite na Pluggo sua chave de API Vendedor da LogManager"
+      },
+      "hide": true
+    },
+    "zip": {
+      "schema": {
+        "type": "string",
+        "maxLength": 9,
+        "pattern": "^[0-9]{5}-?[0-9]{3}$",
+        "title": "CEP de origem",
+        "description": "Código postal do remetente"
+      },
+      "hide": true
+    },
+    "quotes": {
+      "schema": {
+        "title": "Cotações da Pluggo",
+        "description": "Solicite na Pluggo a tabela CEP/valor da sua conta",
+        "type": "array",
+        "maxItems": 5000,
+        "items": {
+          "title": "Cotação por CEP",
+          "type": "object",
+          "minProperties": 1,
+          "properties": {
+            "zip": {
+              "type": "string",
+              "maxLength": 9,
+              "pattern": "^[0-9]{5}-?[0-9]{3}$",
+              "title": "CEP de destino"
+            },
+            "price": {
+              "type": "number",
+              "minimum": 1,
+              "maximum": 999999999,
+              "title": "Preço do frete"
+            }
+          }
+        }
+      },
+      "hide": false
+    },
+    "additional_price": {
+      "schema": {
+        "type": "number",
+        "minimum": -999999,
+        "maximum": 999999,
+        "title": "Custo adicional",
+        "description": "Valor a adicionar (negativo para descontar) no frete calculado em todas regras"
+      },
+      "hide": false
+    },
+    "send_tag_status": {
+      "schema": {
+        "type": "string",
+        "title": "Status para envio de etiqueta",
+        "enum": [
+          "Pago",
+          "Em produção",
+          "Em separação",
+          "Pronto para envio",
+          "NF emitida",
+          "Enviado"
+        ],
+        "default": "Pronto para envio"
+      },
+      "hide": false
+    },
+    "posting_deadline": {
+      "schema": {
+        "title": "Prazo de postagem",
+        "type": "object",
+        "required": [
+          "days"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "days": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 999999,
+            "title": "Número de dias",
+            "description": "Dias de prazo para postar os produtos após a compra"
+          },
+          "working_days": {
+            "type": "boolean",
+            "default": true,
+            "title": "Dias úteis"
+          },
+          "after_approval": {
+            "type": "boolean",
+            "default": true,
+            "title": "Após aprovação do pagamento"
+          }
+        }
+      },
+      "hide": false
+    }
+  },
+  "auth_callback_uri": "https://us-central1-ecom-pluggo.cloudfunctions.net/app/ecom/auth-callback",
   "version": "1.0.0"
 }
