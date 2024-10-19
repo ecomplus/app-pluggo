@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 1.0.0 (2024-10-19)
+
+
+### Features
+
+* add `flags` to shipping line for integration, new endpoitn for logmanager webhook ([21c1ddb](https://github.com/ecomplus/application-starter/commit/21c1ddbd153199e2f4692705b4bf52a252fe9f90))
+* setup calculate shipping module ([dc6e56f](https://github.com/ecomplus/application-starter/commit/dc6e56fdaaaa9d147f22d10df55d771c88a67c6e))
+
+
+### Bug Fixes
+
+* fix config options for order integration status and start send orders cron function ([8224b60](https://github.com/ecomplus/application-starter/commit/8224b608e53c84e6c5e09b98ecba92ea3474e56f))
+* handling configured additional price and `total_price` on shipping line ([3963c25](https://github.com/ecomplus/application-starter/commit/3963c257837ac31f3199a7c05b11074bd66d181c))
+* properly returning shipping line `from` ([c5ee38c](https://github.com/ecomplus/application-starter/commit/c5ee38c80da5e9b261ede90268ff58c4a7bfe982))
+
 ## [1.0.0-starter.26](https://github.com/ecomplus/application-starter/compare/v1.0.0-starter.25...v1.0.0-starter.26) (2022-02-24)
 
 ## [1.0.0-starter.25](https://github.com/ecomplus/application-starter/compare/v1.0.0-starter.24...v1.0.0-starter.25) (2022-02-24)
