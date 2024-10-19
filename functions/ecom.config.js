@@ -207,14 +207,15 @@ const app = {
     send_tag_status: {
       schema: {
         type: 'string',
-        title: 'Status para envio de etiqueta',
+        title: 'Status para integração',
+        description: 'Status de entrega do pedido para exportação automática e emissão da etiqueta',
         enum: [
-          'Pago',
           'Em produção',
           'Em separação',
           'Pronto para envio',
           'NF emitida',
-          'Enviado'
+          'Enviado',
+          'Desabilitar envio automático'
         ],
         default: 'Pronto para envio'
       },

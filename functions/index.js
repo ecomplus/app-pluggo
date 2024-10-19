@@ -143,3 +143,9 @@ exports.updateTokens = functions.pubsub.schedule(cron).onRun(() => {
   })
 })
 console.log(`-- Sheduled update E-Com Plus tokens '${cron}'`)
+
+const cronSendOrders = '*/20 * * * *'
+const sendOrders = require('./lib/pluggo/send-orders')
+exports.sendOrders = functions.runWith({ timeoutSeconds: 540 })
+  .pubsub.schedule(cronSendOrders).onRun(sendOrders)
+console.log(`-- Sheduled send orders to Pluggo API ${cronSendOrders}`)
