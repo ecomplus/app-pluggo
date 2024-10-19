@@ -74,7 +74,8 @@ exports.post = ({ appSdk }, req, res) => {
           working_days: true,
           after_approval: true,
           ...appData.posting_deadline
-        }
+        },
+        flags: ['logmanager']
       }
     })
   }
