@@ -43,8 +43,9 @@
   "devDependencies": {
     "@commitlint/cli": "^19.5.0",
     "@commitlint/config-conventional": "^19.5.0",
+    "commit-and-tag-version": "^9.6.0",
     "husky": "^8.0.3",
     "standard": "^17.1.2",
-    "commit-and-tag-version": "^9.6.0"
+    "standard-version": "^9.5.0"
   }
 }
