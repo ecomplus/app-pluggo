@@ -2,6 +2,7 @@ const { firestore } = require('firebase-admin')
 const { setup } = require('@ecomplus/application-sdk')
 const logger = require('firebase-functions/logger')
 const getAppData = require('../store-api/get-app-data')
+const exportOrder = require('./export-order')
 
 const listStoreIds = () => {
   const storeIds = []
@@ -21,7 +22,7 @@ const listStoreIds = () => {
     })
 }
 
-const fetchOrdersToSend = async ({ appSdk, storeId }) => {
+const fetchOrdersToSend = async ({ appSdk, storeId }, isOddExec) => {
   const auth = await appSdk.getAuth(storeId)
   return new Promise((resolve, reject) => {
     getAppData({ appSdk, storeId, auth })
@@ -47,13 +48,15 @@ const fetchOrdersToSend = async ({ appSdk, storeId }) => {
           const d2 = new Date()
           d2.setHours(d2.getHours() - 2)
           const endpoint = '/orders.json' +
-            '?fields=_id,number,fulfillment_status,shipping_lines' +
-            '&shipping_lines.app.flags=logmanager' +
+            '?fields=_id,created_at,number,amount,shipping_lines,buyers' +
+              ',items.product_id,items.quantity' +
+            '&shipping_lines.flags=logmanager' +
+            '&shipping_lines.tracking_codes.tag!=logmanager' +
             '&financial_status.current=paid' +
             `&fulfillment_status.current=${statusToSend}` +
             `&updated_at>=${d1.toISOString()}` +
             `&updated_at<=${d2.toISOString()}` +
-            '&sort=updated_at' +
+            `&sort=${(isOddExec ? '-' : '')}number` +
             '&limit=200'
           try {
             const { response } = await appSdk.apiRequest(storeId, endpoint, 'GET')
@@ -61,12 +64,10 @@ const fetchOrdersToSend = async ({ appSdk, storeId }) => {
             for (let i = 0; i < orders.length; i++) {
               const order = orders[i]
               try {
-                /*
                 await exportOrder(
                   { appSdk, storeId, auth },
                   { order, token }
                 )
-                */
               } catch (error) {
                 if (
                   error.response?.data?.error?.code === '404' ||
@@ -99,13 +100,16 @@ const fetchOrdersToSend = async ({ appSdk, storeId }) => {
   })
 }
 
-module.exports = context => setup(null, true, firestore())
-  .then(appSdk => {
-    return listStoreIds().then(storeIds => {
-      const runAllStores = fn => storeIds
-        .sort(() => Math.random() - Math.random())
-        .map(storeId => fn({ appSdk, storeId }))
-      return Promise.all(runAllStores(fetchOrdersToSend))
+module.exports = (context) => {
+  const isOddExec = !!(new Date().getMinutes() % 2)
+  return setup(null, true, firestore())
+    .then(appSdk => {
+      return listStoreIds().then(storeIds => {
+        const runAllStores = fn => storeIds
+          .sort(() => Math.random() - Math.random())
+          .map(storeId => fn({ appSdk, storeId }, isOddExec))
+        return Promise.all(runAllStores(fetchOrdersToSend))
+      })
     })
-  })
-  .catch(logger.error)
+    .catch(logger.error)
+}
