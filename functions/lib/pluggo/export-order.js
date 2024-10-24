@@ -10,6 +10,7 @@ module.exports = async (
   const shippingLine = order.shipping_lines.find(({ flags }) => {
     return flags?.includes('logmanager')
   })
+  logger.info(`Start exporting order ${order._id}`, { order, shippingLine })
   if (!shippingLine.to) return
   const invoice = shippingLine.invoices?.[0]
   if (!invoice?.number || !invoice.serial_number || !invoice.access_key) {
