@@ -144,7 +144,7 @@ exports.updateTokens = functions.pubsub.schedule(cron).onRun(() => {
 })
 console.log(`-- Sheduled update E-Com Plus tokens '${cron}'`)
 
-const cronSendOrders = '11,44 * * * *'
+const cronSendOrders = '15,50 * * * *'
 const sendOrders = require('./lib/pluggo/send-orders')
 exports.sendOrders = functions.runWith({ timeoutSeconds: 540 })
   .pubsub.schedule(cronSendOrders).onRun(sendOrders)
