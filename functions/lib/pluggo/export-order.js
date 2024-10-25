@@ -20,7 +20,7 @@ module.exports = async (
   const savedTrackingCode = shippingLine.tracking_codes?.find(({ tag }) => {
     return tag === 'logmanager'
   })
-  if (!savedTrackingCode) {
+  if (savedTrackingCode) {
     logger.warn(`LogManager tracking already saved for #${storeId} ${number}`)
     return
   }
