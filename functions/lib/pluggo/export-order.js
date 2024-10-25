@@ -42,7 +42,7 @@ module.exports = async (
     bairroEntrega: shippingLine.to.borough,
     comentarios: shippingLine.to.near_to || '',
     idVenda: order._id,
-    telefoneComprador: shippingLine.phone.number || buyer?.phones?.[0].number,
+    telefoneComprador: shippingLine.phone?.number || buyer?.phones?.[0].number,
     telefoneComprador_1: buyer?.phones?.[0].number,
     chaveNFE: invoice.access_key,
     numeroNFE: invoice.number,
