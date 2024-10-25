@@ -7,7 +7,10 @@ const debugAxiosError = error => {
     err.response = error.response.data
   }
   err.request = error.config
-  logger.error(err)
+  logger.error(err, {
+    data: err.config?.data,
+    response: err.response?.data
+  })
 }
 
 module.exports = {
