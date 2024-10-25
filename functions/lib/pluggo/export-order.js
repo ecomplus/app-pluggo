@@ -26,10 +26,17 @@ module.exports = async (
   }
   logger.info(`Sending #${storeId} ${number}`)
   const buyer = order.buyers?.[0]
+  const creationDate = new Date(order.created_at)
+  const fmtDatePart = (n) => String(n).padStart(2, '0')
   const data = {
     idEnvio: order._id,
     codigointerno: `${number}`,
-    dtCriacao: order.created_at,
+    dtCriacao: `${creationDate.getFullYear()}-` +
+      `${fmtDatePart(creationDate.getMonth() + 1)}-` +
+      `${fmtDatePart(creationDate.getDate())} ` +
+      `${fmtDatePart(creationDate.getHours())}:` +
+      `${fmtDatePart(creationDate.getMinutes())}:` +
+      `${fmtDatePart(creationDate.getSeconds())}`,
     vlFrete: Math.round((order.amount.freight || 0) * 100),
     vlPago: Math.round(order.amount.total * 100),
     nomeComprador: shippingLine.to.name,
