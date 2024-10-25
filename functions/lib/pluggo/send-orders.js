@@ -45,8 +45,6 @@ const fetchOrdersToSend = async ({ appSdk, storeId }, isOddExec) => {
         if (token && statusToSend) {
           const d1 = new Date()
           d1.setDate(d1.getDate() - 30)
-          const d2 = new Date()
-          d2.setHours(d2.getHours() - 2)
           const endpoint = '/orders.json' +
             '?fields=_id,created_at,number,amount,shipping_lines,buyers' +
               ',items.product_id,items.quantity' +
@@ -55,7 +53,6 @@ const fetchOrdersToSend = async ({ appSdk, storeId }, isOddExec) => {
             '&financial_status.current=paid' +
             `&fulfillment_status.current=${statusToSend}` +
             `&updated_at>=${d1.toISOString()}` +
-            `&updated_at<=${d2.toISOString()}` +
             `&sort=${(isOddExec ? '-' : '')}number` +
             '&limit=200'
           try {
