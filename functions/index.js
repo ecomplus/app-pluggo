@@ -149,3 +149,9 @@ const sendOrders = require('./lib/pluggo/send-orders')
 exports.sendOrders = functions.runWith({ timeoutSeconds: 540 })
   .pubsub.schedule(cronSendOrders).onRun(sendOrders)
 console.log(`-- Sheduled send orders to Pluggo API ${cronSendOrders}`)
+
+const cronCheckTracking = '*/20 * * * *'
+const checkOrdersTracking = require('./lib/pluggo/check-orders-tracking')
+exports.checkOrdersTracking = functions.runWith({ timeoutSeconds: 540 })
+  .pubsub.schedule(cronCheckTracking).onRun(checkOrdersTracking)
+console.log(`-- Sheduled check tracking from Pluggo API ${cronCheckTracking}`)
