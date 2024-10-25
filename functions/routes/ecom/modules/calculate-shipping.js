@@ -34,7 +34,7 @@ exports.post = ({ appSdk }, req, res) => {
   const destinationZip = params.to ? params.to.zip.replace(/\D/g, '') : ''
 
   let price
-  if (appData.quotes) {
+  if (appData.quotes?.length) {
     for (let i = 0; i < appData.quotes.length; i++) {
       const row = appData.quotes[i]
       const zip = row.zip || row.CEP || row[0]
