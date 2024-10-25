@@ -58,6 +58,7 @@ const fetchOrdersToSend = async ({ appSdk, storeId }, isOddExec) => {
           try {
             const { response } = await appSdk.apiRequest(storeId, endpoint, 'GET')
             const orders = response.data.result
+            logger.info(`${orders.length} orders for #${storeId}`)
             for (let i = 0; i < orders.length; i++) {
               const order = orders[i]
               try {
