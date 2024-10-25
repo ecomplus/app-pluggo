@@ -44,8 +44,7 @@ exports.post = ({ appSdk }, req, res) => {
         if (price) break
       }
     }
-  }
-  if (!price) {
+  } else {
     const quote = defaultQuotes.find(([zip]) => zip === destinationZip)
     if (quote) {
       price = quote[1]
