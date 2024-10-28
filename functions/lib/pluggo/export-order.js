@@ -12,11 +12,6 @@ module.exports = async (
   })
   logger.info(`Start exporting order ${order._id}`, { order, shippingLine })
   if (!shippingLine.to) return
-  const invoice = shippingLine.invoices?.[0]
-  if (!invoice?.number || !invoice.serial_number || !invoice.access_key) {
-    logger.warn(`Skipping #${storeId} ${number} without invoice data`)
-    return
-  }
   const savedTrackingCode = shippingLine.tracking_codes?.find(({ tag }) => {
     return tag === 'logmanager'
   })
@@ -51,9 +46,9 @@ module.exports = async (
     idVenda: order._id,
     telefoneComprador: shippingLine.phone?.number || buyer?.phones?.[0].number,
     telefoneComprador_1: buyer?.phones?.[0].number,
-    chaveNFE: invoice.access_key,
-    numeroNFE: invoice.number,
-    serieNFE: invoice.serial_number,
+    chaveNFE: `${order.number}`,
+    numeroNFE: `${order.number}`,
+    serieNFE: '1',
     itens: []
   }
   await Promise.all(order.items.map(async (item) => {
