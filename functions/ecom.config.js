@@ -204,6 +204,17 @@ const app = {
       },
       hide: false
     },
+    max_weight: {
+      schema: {
+        type: 'number',
+        minimum: 0.1,
+        maximum: 100,
+        default: 5,
+        title: 'Peso máximo',
+        description: 'Máximo peso real em kg enviado com seu contrato'
+      },
+      hide: false
+    },
     send_tag_status: {
       schema: {
         type: 'string',
