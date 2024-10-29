@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.1.0](https://github.com/ecomplus/application-starter/compare/v1.0.1...v1.1.0) (2024-10-29)
+
+
+### Features
+
+* adding max shipped weight option to app config and calculation ([39cd549](https://github.com/ecomplus/application-starter/commit/39cd5496dbc19a7f4c0884c80182796c051ec17a))
+* handle new orders export to logmanager api and returned tracking code ([8f90ce3](https://github.com/ecomplus/application-starter/commit/8f90ce32d939fec44a25858d7ee8ebc157092b89))
+* setup tracking routine for orders with created logmanager tag ([2168fdc](https://github.com/ecomplus/application-starter/commit/2168fdce9aa678226a83c8c110611bea3e6f7e51))
+
+
+### Bug Fixes
+
+* **deps:** removing `@google-cloud/firestore` from direct functions deps ([0c765a4](https://github.com/ecomplus/application-starter/commit/0c765a456191661faf3e971a07c07e14131dc85d))
+* **deps:** revert to `firebase-admin` v11 ([7588b24](https://github.com/ecomplus/application-starter/commit/7588b24eeff6423691fd98790bc49f8668b902c2))
+* **deps:** reverting `@google-cloud/firestore` and `firebase-admin` ([6cd0f00](https://github.com/ecomplus/application-starter/commit/6cd0f0012411f034b693c3337dc24f5b90c2d3c5))
+* fix date format on order export ([fbdff81](https://github.com/ecomplus/application-starter/commit/fbdff8124be35519d545ffe042628cf92b9bac91))
+* fix tracking id on order status import ([ebbc07e](https://github.com/ecomplus/application-starter/commit/ebbc07efee29438a39561250dc7af073873cbf9d))
+* increased default quote zips ([c68475d](https://github.com/ecomplus/application-starter/commit/c68475d7b07ff3b0e1254b65ad5c21d4583d84c8))
+* removing max updated at on send orders listing request ([e33070c](https://github.com/ecomplus/application-starter/commit/e33070ceb09621cba66e90d49719dc4e567211eb))
+* skipping default quotes when costumized ones are configured ([3f08874](https://github.com/ecomplus/application-starter/commit/3f08874c96438bd3c2da880f30b8506fddc6ae3a))
+
 ### [1.0.1](https://github.com/ecomplus/application-starter/compare/v1.0.0...v1.0.1) (2024-10-19)
 
 ## 1.0.0 (2024-10-19)
