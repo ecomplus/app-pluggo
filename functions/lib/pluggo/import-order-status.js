@@ -26,7 +26,8 @@ module.exports = async (
   const shippingLine = order.shipping_lines.find(({ flags }) => {
     return flags?.includes('logmanager')
   })
-  const trackingId = shippingLine?.tracking_codes?.find(({ tag }) => tag === 'logmanager')
+  const trackingId = shippingLine?.tracking_codes
+    ?.find(({ tag }) => tag === 'logmanager')?.code
   if (!trackingId) {
     logger.warn(`Skipping ${order._id} with no tracking id`, { order, shippingLine })
     return
