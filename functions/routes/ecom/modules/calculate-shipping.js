@@ -62,6 +62,10 @@ exports.post = ({ appSdk }, req, res) => {
       }
       let m3 = 1
       for (const side in cmDimensions) {
+        if (cmDimensions[side] > 60) {
+          res.send(response)
+          return
+        }
         if (cmDimensions[side]) {
           m3 *= (cmDimensions[side] / 100)
         }
