@@ -152,7 +152,7 @@ exports.post = ({ appSdk }, req, res) => {
       total_price: price - discount,
       discount,
       delivery_time: {
-        days: 0,
+        days: appData.posting_deadline?.days ? 1 : 0,
         working_days: true
       },
       posting_deadline: {
