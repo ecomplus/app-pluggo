@@ -143,35 +143,30 @@ exports.post = ({ appSdk }, req, res) => {
   const discount = appData.additional_price ? -appData.additional_price : 0
   if (price) {
     const shippingLine = {
-      label: appData.label || 'Super expresso',
-      carrier: 'Pluggo',
-      shipping_line: {
-        from: {
-          zip: appData.zip,
-          ...params.from
-        },
-        to: params.to,
-        price,
-        total_price: price - discount,
-        discount,
-        delivery_time: {
-          days: 0,
-          working_days: true
-        },
-        posting_deadline: {
-          days: 1,
-          working_days: true,
-          after_approval: true,
-          ...appData.posting_deadline
-        },
-        flags: ['logmanager']
-      }
+      from: {
+        zip: appData.zip,
+        ...params.from
+      },
+      to: params.to,
+      price,
+      total_price: price - discount,
+      discount,
+      delivery_time: {
+        days: 0,
+        working_days: true
+      },
+      posting_deadline: {
+        days: 1,
+        working_days: true,
+        after_approval: true,
+        ...appData.posting_deadline
+      },
+      flags: ['logmanager']
     }
     if (Array.isArray(appData.shipping_rules)) {
       for (let i = 0; i < appData.shipping_rules.length; i++) {
         const rule = appData.shipping_rules[i]
         if (rule && checkZipCode(rule) && !(rule.min_amount > subtotal)) {
-          // valid shipping rule
           if (rule.free_shipping) {
             shippingLine.discount += shippingLine.total_price
             shippingLine.total_price = 0
@@ -193,7 +188,11 @@ exports.post = ({ appSdk }, req, res) => {
         }
       }
     }
-    response.shipping_services.push()
+    response.shipping_services.push({
+      label: appData.label || 'Super expresso',
+      carrier: 'Pluggo',
+      shipping_line: shippingLine
+    })
   }
 
   res.send(response)
