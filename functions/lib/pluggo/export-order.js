@@ -51,17 +51,15 @@ module.exports = async (
     serieNFE: '1',
     itens: []
   }
-  await Promise.all(order.items.map(async (item, i) => {
-    if (order.items.length > 7) {
-      await new Promise((resolve) => setTimeout(resolve, i * 200))
-    }
+  for (let i = 0; i < order.items.length; i++) {
+    const item = order.items[i]
     const productId = item.product_id
-    if (!productId) return
+    if (!productId) continue
     const {
       response: { data: product }
     } = await appSdk.apiRequest(storeId, `/products/${productId}.json`, 'GET', null, null, true)
     const { weight, dimensions } = product
-    if (!weight?.value || !dimensions) return
+    if (!weight?.value || !dimensions) continue
     let gWeight = 0
     switch (weight.unit) {
       case 'kg':
@@ -101,7 +99,7 @@ module.exports = async (
         comprimento: cmDimensions.length
       }
     })
-  }))
+  }
   let response
   try {
     response = await axios({
