@@ -51,7 +51,10 @@ module.exports = async (
     serieNFE: '1',
     itens: []
   }
-  await Promise.all(order.items.map(async (item) => {
+  await Promise.all(order.items.map(async (item, i) => {
+    if (order.items.length > 8) {
+      await new Promise((resolve) => setTimeout(resolve, i * 100))
+    }
     const productId = item.product_id
     if (!productId) return
     const {
