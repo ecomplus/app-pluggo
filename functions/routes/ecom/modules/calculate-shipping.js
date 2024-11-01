@@ -23,6 +23,7 @@ exports.post = ({ appSdk }, req, res) => {
   const appData = Object.assign({}, application.data, application.hidden_data)
 
   let pkgKgWeight = 0
+  let subtotal = 0
   params.items?.forEach((item) => {
     const { quantity, dimensions, weight } = item
     let kgWeight = 0
@@ -81,6 +82,7 @@ exports.post = ({ appSdk }, req, res) => {
         : cubicWeight
       pkgKgWeight += (quantity * unitFinalWeight)
     }
+    subtotal += quantity * (item.final_price || item.price)
   })
   if (pkgKgWeight) {
     const maxKg = appData.max_weight || 5
@@ -93,13 +95,33 @@ exports.post = ({ appSdk }, req, res) => {
   if (appData.free_shipping_from_value >= 0) {
     response.free_shipping_from_value = appData.free_shipping_from_value
   }
+  const destinationZip = params.to ? params.to.zip.replace(/\D/g, '') : ''
+  const checkZipCode = rule => {
+    if (destinationZip && rule.zip_range) {
+      const { min, max } = rule.zip_range
+      return Boolean((!min || destinationZip >= min) && (!max || destinationZip <= max))
+    }
+    return true
+  }
+  if (Array.isArray(appData.shipping_rules)) {
+    for (let i = 0; i < appData.shipping_rules.length; i++) {
+      const rule = appData.shipping_rules[i]
+      if (rule.free_shipping && checkZipCode(rule)) {
+        if (!rule.min_amount) {
+          response.free_shipping_from_value = 0
+          break
+        } else if (!(response.free_shipping_from_value <= rule.min_amount)) {
+          response.free_shipping_from_value = rule.min_amount
+        }
+      }
+    }
+  }
   if (!params.to) {
     // just a free shipping preview with no shipping address received
     // respond only with free shipping option
     res.send(response)
     return
   }
-  const destinationZip = params.to ? params.to.zip.replace(/\D/g, '') : ''
 
   let price
   if (appData.quotes?.length) {
@@ -120,7 +142,7 @@ exports.post = ({ appSdk }, req, res) => {
   }
   const discount = appData.additional_price ? -appData.additional_price : 0
   if (price) {
-    response.shipping_services.push({
+    const shippingLine = {
       label: appData.label || 'Super expresso',
       carrier: 'Pluggo',
       shipping_line: {
@@ -144,7 +166,34 @@ exports.post = ({ appSdk }, req, res) => {
         },
         flags: ['logmanager']
       }
-    })
+    }
+    if (Array.isArray(appData.shipping_rules)) {
+      for (let i = 0; i < appData.shipping_rules.length; i++) {
+        const rule = appData.shipping_rules[i]
+        if (rule && checkZipCode(rule) && !(rule.min_amount > subtotal)) {
+          // valid shipping rule
+          if (rule.free_shipping) {
+            shippingLine.discount += shippingLine.total_price
+            shippingLine.total_price = 0
+            break
+          } else if (rule.discount) {
+            let discountValue = rule.discount.value
+            if (rule.discount.percentage) {
+              discountValue *= (shippingLine.total_price / 100)
+            }
+            if (discountValue) {
+              shippingLine.discount += discountValue
+              shippingLine.total_price -= discountValue
+              if (shippingLine.total_price < 0) {
+                shippingLine.total_price = 0
+              }
+            }
+            break
+          }
+        }
+      }
+    }
+    response.shipping_services.push()
   }
 
   res.send(response)
