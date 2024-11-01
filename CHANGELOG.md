@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.2.0](https://github.com/ecomplus/application-starter/compare/v1.1.0...v1.2.0) (2024-11-01)
+
+
+### Features
+
+* supporting shipping rules for conditional discounts/additions ([43e5fca](https://github.com/ecomplus/application-starter/commit/43e5fcaa2e454053912f46760ec0c3df6ecb4ee7))
+
+
+### Bug Fixes
+
+* deplay concurrenct product read requests on order export ([b14e781](https://github.com/ecomplus/application-starter/commit/b14e7811d57ae621698dc76be4125c9d7dd0acc1))
+* deplay concurrenct product read requests on order export ([1471ab3](https://github.com/ecomplus/application-starter/commit/1471ab316a05b90dc881d611b393304cf312cd2a))
+* fetching order items one by one on order export ([e82cc30](https://github.com/ecomplus/application-starter/commit/e82cc305eed9f13c41644c478de49f4b1c5d8046))
+* hard limit 60cm on shipping calculation ([2d6360f](https://github.com/ecomplus/application-starter/commit/2d6360f623f4706b01997db66662bc2bd24de225))
+
 ## [1.1.0](https://github.com/ecomplus/application-starter/compare/v1.0.1...v1.1.0) (2024-10-29)
 
 
