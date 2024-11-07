@@ -19,9 +19,13 @@ exports.post = ({ appSdk }, req, res) => {
   const response = {
     shipping_services: []
   }
-  // merge all app options configured by merchant
-  const appData = Object.assign({}, application.data, application.hidden_data)
+  if (!params.to) {
+    // skip free shipping option without destination zip (few zip codes served)
+    res.send(response)
+    return
+  }
 
+  const appData = Object.assign({}, application.data, application.hidden_data)
   let pkgKgWeight = 0
   let subtotal = 0
   params.items?.forEach((item) => {
@@ -115,12 +119,6 @@ exports.post = ({ appSdk }, req, res) => {
         }
       }
     }
-  }
-  if (!params.to) {
-    // just a free shipping preview with no shipping address received
-    // respond only with free shipping option
-    res.send(response)
-    return
   }
 
   let price
