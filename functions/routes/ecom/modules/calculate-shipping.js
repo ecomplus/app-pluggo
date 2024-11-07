@@ -96,9 +96,6 @@ exports.post = ({ appSdk }, req, res) => {
     }
   }
 
-  if (appData.free_shipping_from_value >= 0) {
-    response.free_shipping_from_value = appData.free_shipping_from_value
-  }
   const destinationZip = params.to ? params.to.zip.replace(/\D/g, '') : ''
   const checkZipCode = rule => {
     if (destinationZip && rule.zip_range) {
@@ -106,19 +103,6 @@ exports.post = ({ appSdk }, req, res) => {
       return Boolean((!min || destinationZip >= min) && (!max || destinationZip <= max))
     }
     return true
-  }
-  if (Array.isArray(appData.shipping_rules)) {
-    for (let i = 0; i < appData.shipping_rules.length; i++) {
-      const rule = appData.shipping_rules[i]
-      if (rule.free_shipping && checkZipCode(rule)) {
-        if (!rule.min_amount) {
-          response.free_shipping_from_value = 0
-          break
-        } else if (!(response.free_shipping_from_value <= rule.min_amount)) {
-          response.free_shipping_from_value = rule.min_amount
-        }
-      }
-    }
   }
 
   let price
@@ -191,6 +175,22 @@ exports.post = ({ appSdk }, req, res) => {
       carrier: 'Pluggo',
       shipping_line: shippingLine
     })
+    if (appData.free_shipping_from_value >= 0) {
+      response.free_shipping_from_value = appData.free_shipping_from_value
+    }
+    if (Array.isArray(appData.shipping_rules)) {
+      for (let i = 0; i < appData.shipping_rules.length; i++) {
+        const rule = appData.shipping_rules[i]
+        if (rule.free_shipping && checkZipCode(rule)) {
+          if (!rule.min_amount) {
+            response.free_shipping_from_value = 0
+            break
+          } else if (!(response.free_shipping_from_value <= rule.min_amount)) {
+            response.free_shipping_from_value = rule.min_amount
+          }
+        }
+      }
+    }
   }
 
   res.send(response)
